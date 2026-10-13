@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Old+Mincho&display=swap');
 @import "tailwindcss";
+
+.font-zen {
+  font-family: "Zen Old Mincho", serif;
+  font-style: normal;
+}
 
 :root {
   color-scheme: light;
@@ -10,8 +16,108 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 a {
   color: inherit;
+}
+
+/* 左右スライドアニメーション */
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0.2;
+  }
+}
+
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0.2;
+  }
+}
+
+/* アニメーション用クラス */
+.slide-in-right {
+  animation: slideInFromRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.slide-in-left {
+  animation: slideInFromLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.slide-out-left {
+  animation: slideOutToLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.slide-out-right {
+  animation: slideOutToRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+/* ページコンテンツコンテナ（横はみ出し防止） */
+.tab-content-container {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* View Transitions API (ブラウザ標準) */
+::view-transition-old(page-content),
+::view-transition-new(page-content) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+html[data-slide-direction="forward"]::view-transition-old(page-content) {
+  animation-name: slideOutToLeft;
+}
+html[data-slide-direction="forward"]::view-transition-new(page-content) {
+  animation-name: slideInFromRight;
+}
+
+html[data-slide-direction="backward"]::view-transition-old(page-content) {
+  animation-name: slideOutToRight;
+}
+html[data-slide-direction="backward"]::view-transition-new(page-content) {
+  animation-name: slideInFromLeft;
+}
+
+.page-transition-view {
+  view-transition-name: page-content;
 }
